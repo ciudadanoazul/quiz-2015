@@ -50,12 +50,23 @@ sequelize.sync().then(function() {
 	Quiz.count().then(function(count) {
 		if (count === 0) {
 			// Inicializar la tabla solo si está vacía
+			Quiz.create({pregunta: 'Quién ganó la Primer Liga en 2011-12',
+						 respuesta: 'el Manchester City',
+						 tema: 'ocio'
+						});
+
+			Quiz.create({pregunta: 'Qué es Javascript',
+						 respuesta: 'Un lenguaje de programación',
+						 tema: 'tecnologia'
+						});
 
 			Quiz.create({pregunta: 'Capital de Italia',
-						 respuesta: 'Roma'
+						 respuesta: 'Roma',
+						 tema: 'Humanidades'
 					 });
 			Quiz.create({pregunta: 'Capital de Portugal',
-						 respuesta: 'Lisboa'
+						 respuesta: 'Lisboa',
+						 tema: 'Humanidades'
 	 				 }).then(function(){
 								console.log('Base de datos inicializada')});
 		};
