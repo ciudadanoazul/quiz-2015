@@ -2,7 +2,14 @@ var models = require('../models/models.js');
 
 // Autoload :id
 exports.load = function(req, res, next, quizId) {
-  models.Quiz.findById(quizId).then(
+  models.Quiz.find({
+          where: {
+              id: Number(quizId)
+          },
+          include: [{
+              model: models.Comment
+          }]
+      }).then(
 
   // Comprueba que existe el quiz y lo guarda
 	// Si no existe echa un error
