@@ -9,6 +9,9 @@ var partials = require('express-partials');
 // Instalar el paquete del MW method-override
 var methodOverride = require('method-override');
 
+// Importar middleware de gestión de sesiones
+var session = require('express-session');
+
 var routes = require('./routes/index');
 
 var app = express();
@@ -24,9 +27,23 @@ app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
-app.use(cookieParser());
+app.use(cookieParser('Quiz 2015')); // Añadir clave para cifrar COOKIES
+app.use(session()); // Instalar MW sesion
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Helpers dinamicos:
+app.use(function(req, res, next) {
+
+  // guardar path en session.redir para despues de login
+  if (!req.path.match(/\/login|\/logout/)) {
+    req.session.redir = req.path;
+  }
+
+  // Hacer visible req.session en las vistas
+  res.locals.session = req.session;
+  next();
+});
 
 app.use('/', routes);
 
