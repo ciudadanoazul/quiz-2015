@@ -45,6 +45,28 @@ if (!req.path.match(/\/login|\/logout/)) {
   next();
 });
 
+//session auto-logout
+app.use(function(req,res,next) {
+
+    if(req.session.user) {
+            var timeNow = new Date().getTime();
+            var currentInactivityTime  = timeNow - req.session.user.lastClickTime;
+            var max_time_sleep = 120000;
+
+            if(currentInactivityTime > max_time_sleep) {
+
+                   delete req.session.user;
+                   res.redirect("/login");
+
+            }
+            else
+            {
+                req.session.user.lastClickTime = timeNow;
+            }
+    }
+next();
+});
+
 app.use('/', routes);
 
 // catch 404 and forward to error handler
